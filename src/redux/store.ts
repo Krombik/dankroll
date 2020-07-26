@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware, Middleware } from "redux";
 import thunkMiddleware from "redux-thunk";
 import { combinedReducer } from "./reducer";
+import { persistStore } from "redux-persist";
 
 const bindMiddleware = (middleware: Middleware) => {
   if (process.env.NODE_ENV !== "production") {
@@ -14,3 +15,5 @@ export const store = createStore(
   combinedReducer,
   bindMiddleware(thunkMiddleware)
 );
+
+export const persistor = persistStore(store);
