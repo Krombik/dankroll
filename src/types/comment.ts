@@ -1,9 +1,8 @@
-export type CommentType = {
+export interface CommentType extends CreateCommentType {
   id: number;
-  postId: number;
-  body: string;
-};
+}
 
-export type CreateCommentType = {
+export interface CreateCommentType {
   body: string;
-};
+  postId: number;
+}

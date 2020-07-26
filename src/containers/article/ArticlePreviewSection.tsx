@@ -6,19 +6,17 @@ type Props = {
   articles: ArticleType[];
 };
 
-const ArticlePreviewSection: FC<Props> = ({ articles }) => {
-  return (
-    <>
-      {articles.map((article, index) => (
-        <ArticlePreview
-          key={index}
-          title={article.title}
-          body={article.body}
-          href={"/articles/" + article.id}
-        />
-      ))}
-    </>
-  );
-};
+const ArticlePreviewSection: FC<Props> = ({ articles }) => (
+  <>
+    {articles.map((article, index) => (
+      <ArticlePreview
+        key={index}
+        title={article.title}
+        body={article.body}
+        href={`/article/${article.id}`}
+      />
+    ))}
+  </>
+);
 
 export default ArticlePreviewSection;

@@ -12,42 +12,40 @@ const fetcher = {
   },
   async delete<T>(url: string): Promise<FetchRV<T>> {
     try {
-      return (await axios.delete(url)).data;
+      return { res: (await axios.delete(url)).data };
     } catch (error) {
       const { data, status } = error.response as AxiosResponse;
-      return { ...data, error: status };
+      return { res: data, status };
     }
   },
   async post<T>(url: string, content?: any): Promise<FetchRV<T>> {
     try {
-      if (content)
-        return (
-          await axios.post(url, JSON.stringify(content), {
+      const { data } = await (content
+        ? axios.post(url, JSON.stringify(content), {
             headers: {
               "Content-Type": "application/json",
             },
           })
-        ).data;
-      return (await axios.post(url)).data;
+        : axios.post(url));
+      return { res: data };
     } catch (error) {
       const { data, status } = error.response as AxiosResponse;
-      return { ...data, error: status };
+      return { res: data, status };
     }
   },
   async put<T>(url: string, content?: any): Promise<FetchRV<T>> {
     try {
-      if (content)
-        return (
-          await axios.put(url, JSON.stringify(content), {
+      const { data } = await (content
+        ? axios.put(url, JSON.stringify(content), {
             headers: {
               "Content-Type": "application/json",
             },
           })
-        ).data;
-      return (await axios.put(url)).data;
+        : axios.put(url));
+      return { res: data };
     } catch (error) {
       const { data, status } = error.response as AxiosResponse;
-      return { ...data, error: status };
+      return { res: data, status };
     }
   },
 };

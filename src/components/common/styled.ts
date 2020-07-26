@@ -1,13 +1,7 @@
-import React from "react";
 import styled from "styled-components";
-import Modal, { ModalProps } from "@material-ui/core/Modal";
 import Divider from "@material-ui/core/Divider";
 
 type StyledBannerProps = { backgroundColor: string };
-export interface StyledModalProps extends ModalProps {
-  article?: boolean;
-  authorization?: boolean;
-}
 
 export const StyledBanner = styled.div<StyledBannerProps>`
   padding: 25px 0;
@@ -31,19 +25,4 @@ export const FullWidthDivider = styled(Divider)`
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-`;
-
-export const StyledModal = styled(
-  ({ article, authorization, ...props }: StyledModalProps) => (
-    <Modal {...props} />
-  )
-)`
-  display: flex;
-  flex-direction: column;
-  width: 90vw;
-  max-width: ${({ article, authorization }) =>
-    authorization ? "600px" : !article ? "1200px" : "auto"};
-  margin: auto;
-  justify-content: space-between;
-  overflow-y: auto;
 `;

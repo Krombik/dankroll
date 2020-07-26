@@ -5,6 +5,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import { Link } from "react-router-dom";
 
 type Props = {
   title: string | JSX.Element;
@@ -24,8 +25,8 @@ const ArticlePreview: FC<Props> = ({ title, body, href = "" }) => (
           variant="contained"
           color="primary"
           disabled={!href}
-          component="a"
-          href={href}
+          component={Link}
+          to={href}
         >
           Read more
         </Button>

@@ -9,23 +9,21 @@ import { Link } from "react-router-dom";
 import { SITE_NAME } from "../../utils/constant";
 import ThemeSwitcher from "./ThemeSwitcher";
 
-const Header: FC = memo(() => {
-  return (
-    <AppBar position="static" color="default">
-      <Container maxWidth="lg">
-        <Toolbar>
-          <Grid container justify="space-between" alignItems="center">
-            <Typography variant="h6">
-              <MuiLink color="inherit" underline="none" component={Link} to="/">
-                {SITE_NAME}
-              </MuiLink>
-            </Typography>
-            <ThemeSwitcher />
-          </Grid>
-        </Toolbar>
-      </Container>
-    </AppBar>
-  );
-});
+const Header: FC = memo(() => (
+  <AppBar position="static" color="default">
+    <Container maxWidth="lg">
+      <Toolbar disableGutters>
+        <Grid container justify="space-between" alignItems="center">
+          <Typography variant="h6">
+            <MuiLink color="inherit" underline="none" component={Link} to="/">
+              {SITE_NAME}
+            </MuiLink>
+          </Typography>
+          <ThemeSwitcher />
+        </Grid>
+      </Toolbar>
+    </Container>
+  </AppBar>
+));
 
 export default Header;

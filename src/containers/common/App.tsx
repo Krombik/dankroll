@@ -4,10 +4,11 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { StylesProvider, ThemeProvider } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import Home from "./Home";
+import Home from "../../pages/Home";
 import { State } from "../../types";
 import makeTheme from "../../utils/makeTheme";
 import Layout from "../../components/common/Layout";
+import Article from "../../pages/Article";
 
 const selectData = createSelector(
   (state: State) => state.common.dark,
@@ -24,9 +25,9 @@ const App: FC = () => {
         <Router>
           <Layout>
             <Switch>
-              {/* <Route path="/articles">
-            <Users />
-          </Route> */}
+              <Route path="/article/:postId">
+                <Article />
+              </Route>
               <Route path="/">
                 <Home />
               </Route>
