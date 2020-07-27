@@ -18,6 +18,9 @@ export const StyledBanner = styled.div<StyledBannerProps>`
     background: ${(props) => props.backgroundColor};
     box-shadow: inset 0px 0px 25px 20px rgba(0, 0, 0, 0.1);
   }
+  [class*="MuiIconButton"] {
+    font-size: inherit;
+  }
 `;
 
 export const FullWidthDivider = styled(Divider)`

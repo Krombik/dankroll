@@ -65,8 +65,10 @@ const makeTheme = (isDark: boolean) =>
               "overflow-x": "hidden",
               "max-width": "100vw",
             },
-            ".draggable": {
-              cursor: "grab",
+            header: {
+              "& + .MuiContainer-root > form.MuiGrid-container": {
+                marginTop: 0,
+              },
             },
           },
         },
