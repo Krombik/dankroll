@@ -1,11 +1,11 @@
 import { ThunkResult } from "../../types";
-import { ActionTypes } from "./type";
+import { ErrorActionTypes } from "./type";
 
 export const setError = (error: boolean, errorStatus?: number): ThunkResult => (
   dispatch
 ) => {
   dispatch({
-    type: ActionTypes.SET_ERROR,
+    type: ErrorActionTypes.SET_ERROR,
     payload: error
       ? {
           error,

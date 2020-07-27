@@ -1,9 +1,9 @@
-export enum ActionTypes {
+export enum ErrorActionTypes {
   SET_ERROR = "SET_ERROR",
 }
 
 type SetError = {
-  type: ActionTypes.SET_ERROR;
+  type: ErrorActionTypes.SET_ERROR;
   payload: {
     error: boolean;
     errorText?: string;

@@ -1,4 +1,4 @@
-import { ActionTypes, ErrorActions } from "./type";
+import { ErrorActionTypes, ErrorActions } from "./type";
 
 type State = {
   error: boolean;
@@ -17,7 +17,7 @@ export default function reducer(
   action: ErrorActions
 ): State {
   switch (action.type) {
-    case ActionTypes.SET_ERROR:
+    case ErrorActionTypes.SET_ERROR:
       return {
         ...state,
         ...action.payload,

@@ -9,6 +9,7 @@ import { State } from "../../types";
 import makeTheme from "../../utils/makeTheme";
 import Layout from "../../components/common/Layout";
 import Article from "../../pages/Article";
+import Editor from "../../pages/Editor";
 
 const selectData = createSelector(
   (state: State) => state.common.dark,
@@ -25,11 +26,17 @@ const App: FC = () => {
         <Router>
           <Layout>
             <Switch>
-              <Route path="/article/:postId">
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route exact path="/article/new">
+                <Editor />
+              </Route>
+              <Route exact path="/article/:postId">
                 <Article />
               </Route>
-              <Route path="/">
-                <Home />
+              <Route exact path="/article/:postId/edit">
+                <Editor />
               </Route>
             </Switch>
           </Layout>
