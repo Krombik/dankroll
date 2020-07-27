@@ -10,7 +10,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { createSelector } from "reselect";
 import { State, ThunkDispatcher } from "../types";
 import { useSelector, useDispatch } from "react-redux";
-import { setEditor, createEditor, clearEditor } from "../redux/editor/actions";
+import { setEditor, createEditor, removeEditor } from "../redux/editor/actions";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -52,7 +52,7 @@ const Editor: FC = () => {
     setLoading(false);
     if (status) dispatch(setError(true, status));
     else {
-      dispatch(clearEditor(postId));
+      dispatch(removeEditor(postId));
       history.push(`/article/${res.id}`);
     }
   };

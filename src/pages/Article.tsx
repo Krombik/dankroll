@@ -1,37 +1,35 @@
 import Grid from "@material-ui/core/Grid";
 import React, { FC, useEffect } from "react";
 import { FullWidthDivider } from "../components/common/styled";
-import fetcher from "../utils/fetcher";
-import { FetchRV, ThunkDispatcher } from "../types";
-import { useDispatch } from "react-redux";
-import { setError } from "../redux/error/actions";
-import useSWR from "swr";
-import { ArticleType } from "../types/article";
-import { getArticleUrl } from "../api/article";
+import { ThunkDispatcher, State } from "../types";
+import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../components/common/Spinner";
 import ArticleSection from "../containers/article/ArticleSection";
 import CommentSection from "../containers/comment/CommentSection";
 import { useParams } from "react-router-dom";
+import { loadArticle } from "../redux/store/actions";
+import { createSelector } from "reselect";
+
+const selectData = createSelector(
+  (state: State) => state.store.articlePages,
+  (articlePages) => ({ articlePages })
+);
 
 const Article: FC = () => {
   const { postId } = useParams();
-  const { data, mutate } = useSWR<FetchRV<ArticleType>>(
-    getArticleUrl(postId),
-    fetcher.get
-  );
+  const { articlePages } = useSelector(selectData);
   const dispatch = useDispatch<ThunkDispatcher>();
   useEffect(() => {
-    if (data?.status) dispatch(setError(true, data.status));
+    dispatch(loadArticle(postId));
   });
-  if (!data) return <Spinner />;
-  if (data.status) return null;
+  if (!articlePages || !articlePages[postId]) return <Spinner />;
   return (
     <Grid item container spacing={3}>
-      <ArticleSection article={data.res} />
+      <ArticleSection article={articlePages[postId]} />
       <Grid item xs={12}>
         <FullWidthDivider />
       </Grid>
-      <CommentSection article={data.res} mutate={mutate} />
+      <CommentSection article={articlePages[postId]} />
     </Grid>
   );
 };

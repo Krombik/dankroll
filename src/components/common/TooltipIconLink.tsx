@@ -12,7 +12,9 @@ const TooltipIconLink: FC<Props & LinkProps & IconButtonProps> = ({
   ...props
 }) => (
   <Tooltip title={tooltip}>
-    <IconButton color="inherit" component={Link} {...props} />
+    <span>
+      <IconButton color="inherit" component={Link} {...props} />
+    </span>
   </Tooltip>
 );
 

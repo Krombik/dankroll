@@ -1,17 +1,17 @@
 import { ArticleType } from "../../types/article";
-import React, { FC, SyntheticEvent } from "react";
+import React, { FC } from "react";
 import ArticlePreview from "../../components/article/ArticlePreview";
-import { FetchRV, ThunkDispatcher } from "../../types";
+import { ThunkDispatcher } from "../../types";
 import { deleteArticle } from "../../api/article";
 import { useDispatch } from "react-redux";
 import { setError } from "../../redux/error/actions";
+import { setArticles } from "../../redux/store/actions";
 
 type Props = {
   articles: ArticleType[];
-  mutate: (data: FetchRV<ArticleType[]>, shouldRevalidate?: boolean) => any;
 };
 
-const ArticlePreviewSection: FC<Props> = ({ articles, mutate }) => {
+const ArticlePreviewSection: FC<Props> = ({ articles }) => {
   const dispatch = useDispatch<ThunkDispatcher>();
   let loading = false;
   const handleDelete = async (id: number, index: number) => {
@@ -22,9 +22,11 @@ const ArticlePreviewSection: FC<Props> = ({ articles, mutate }) => {
         dispatch(setError(true, status));
         loading = false;
       } else
-        mutate(
-          { res: [...articles.slice(0, index), ...articles.slice(index + 1)] },
-          false
+        dispatch(
+          setArticles([
+            ...articles.slice(0, index),
+            ...articles.slice(index + 1),
+          ])
         );
     }
   };

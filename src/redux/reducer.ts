@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 import commonReducer from "./common/reducer";
 import errorReducer from "./error/reducer";
 import editorReducer from "./editor/reducer";
+import storeReducer from "./store/reducer";
 
 const commonConfig: PersistConfig<any> = {
   key: "dark",
@@ -21,4 +22,5 @@ export const combinedReducer = combineReducers({
   common: persistReducer(commonConfig, commonReducer),
   error: errorReducer,
   editor: persistReducer(editorConfig, editorReducer),
+  store: storeReducer,
 });

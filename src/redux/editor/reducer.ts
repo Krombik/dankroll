@@ -1,8 +1,8 @@
 import { EditorActionTypes, EditorActions } from "./type";
-import { ArticleEditorObj } from "../../types/article";
+import { ArticleEditorType } from "../../types/article";
 
 type State = {
-  editors: ArticleEditorObj;
+  editors: { [key: string]: ArticleEditorType };
 };
 
 const initialState: State = {
@@ -25,7 +25,7 @@ export default function reducer(
           },
         },
       };
-    case EditorActionTypes.CLEAR_EDITOR:
+    case EditorActionTypes.REMOVE_EDITOR:
       return {
         ...state,
         editors: (({ [action.payload]: _, ...rest }) => rest)(state.editors),

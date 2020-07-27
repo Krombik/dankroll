@@ -7,7 +7,6 @@ import { ArticleType } from "../../types/article";
 
 type Props = {
   article: ArticleType;
-  mutate: (...args: any) => any;
 };
 
 const CommentSection: FC<Props> = (props) => {
@@ -20,7 +19,7 @@ const CommentSection: FC<Props> = (props) => {
         <Typography variant="h4">Comments: {comments.length}</Typography>
       </Grid>
       <Grid item xs={12}>
-        <PostComment {...props} />
+        <PostComment postId={props.article.id} />
       </Grid>
       {comments.length > 0 && <Comments comments={comments} />}
     </>

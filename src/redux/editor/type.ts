@@ -2,7 +2,7 @@ import { ArticleEditorType } from "../../types/article";
 
 export enum EditorActionTypes {
   SET_EDITOR = "SET_EDITOR",
-  CLEAR_EDITOR = "CLEAR_EDITOR",
+  REMOVE_EDITOR = "REMOVE_EDITOR",
 }
 
 type SetEditor = {
@@ -10,9 +10,9 @@ type SetEditor = {
   payload: { key: string; editor: Partial<ArticleEditorType> };
 };
 
-type ClearEditor = {
-  type: EditorActionTypes.CLEAR_EDITOR;
+type RemoveEditor = {
+  type: EditorActionTypes.REMOVE_EDITOR;
   payload: string;
 };
 
-export type EditorActions = SetEditor | ClearEditor;
+export type EditorActions = SetEditor | RemoveEditor;

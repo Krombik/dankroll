@@ -11,7 +11,9 @@ const TooltipIconButton: FC<Props & IconButtonProps> = ({
   ...props
 }) => (
   <Tooltip title={tooltip}>
-    <IconButton color="inherit" {...props} />
+    <span>
+      <IconButton color="inherit" {...props} />
+    </span>
   </Tooltip>
 );
 

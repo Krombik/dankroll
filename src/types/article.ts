@@ -1,7 +1,7 @@
 import { CommentType } from "./comment";
 
-export type ArticleEditorObj = {
-  [key: string]: ArticleEditorType;
+export type ArticlesObj = {
+  [key: string]: ArticleType;
 };
 
 export interface ArticleEditorType {

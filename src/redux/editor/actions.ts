@@ -33,9 +33,9 @@ export const createEditor = (key: string): ThunkResult<Promise<void>> => async (
   });
 };
 
-export const clearEditor = (key: string): ThunkResult => (dispatch) => {
+export const removeEditor = (key: string): ThunkResult => (dispatch) => {
   dispatch({
-    type: EditorActionTypes.CLEAR_EDITOR,
+    type: EditorActionTypes.REMOVE_EDITOR,
     payload: key,
   });
 };
