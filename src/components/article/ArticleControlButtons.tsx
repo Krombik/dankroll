@@ -6,7 +6,7 @@ import TooltipIconButton from "../common/TooltipIconButton";
 
 type Props = {
   id: string | number;
-  onDelete?: (e: any) => void;
+  onDelete?: () => void;
 };
 
 const ArticleControlButtons: FC<Props> = ({ id, onDelete = null }) => (

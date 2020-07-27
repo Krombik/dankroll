@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { setError } from "../../redux/error/actions";
 
 const ArticleList: FC = () => {
-  const { data } = useSWR<FetchRV<ArticleType[]>>(
+  const { data, mutate } = useSWR<FetchRV<ArticleType[]>>(
     ALL_ARTICLES_URL,
     fetcher.get
   );
@@ -27,7 +27,7 @@ const ArticleList: FC = () => {
         <Typography align="center">No articles available</Typography>
       </Grid>
     );
-  return <ArticlePreviewSection articles={data.res} />;
+  return <ArticlePreviewSection articles={data.res} mutate={mutate} />;
 };
 
 export default ArticleList;

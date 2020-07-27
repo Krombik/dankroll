@@ -9,7 +9,7 @@ import useSWR from "swr";
 import { ArticleType } from "../types/article";
 import { getArticleUrl } from "../api/article";
 import Spinner from "../components/common/Spinner";
-import ArticleSection from "../components/article/ArticleSection";
+import ArticleSection from "../containers/article/ArticleSection";
 import CommentSection from "../containers/comment/CommentSection";
 import { useParams } from "react-router-dom";
 

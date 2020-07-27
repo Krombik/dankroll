@@ -13,14 +13,15 @@ type Props = {
   title: string | JSX.Element;
   body: string | JSX.Element;
   href?: string;
+  onDelete?: () => void;
 };
 
-const ArticlePreview: FC<Props> = ({ title, body, href = "" }) => (
+const ArticlePreview: FC<Props> = ({ title, body, href = "", onDelete }) => (
   <Grid item xs={12} lg={6}>
     <StyledArticlePreview>
       <CardHeader
         title={<Typography variant="h5">{title}</Typography>}
-        action={<ArticleControlButtons id={href} />}
+        action={<ArticleControlButtons id={href} onDelete={onDelete} />}
       />
       <CardContent>
         <Typography variant="subtitle1">{body}</Typography>
