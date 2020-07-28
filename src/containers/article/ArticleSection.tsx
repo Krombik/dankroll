@@ -9,6 +9,8 @@ import { ThunkDispatcher } from "../../types";
 import { deleteArticle } from "../../api/article";
 import { setError } from "../../redux/error/actions";
 import { useHistory } from "react-router-dom";
+import { removeArticle } from "../../redux/store/actions";
+import { removeEditor } from "../../redux/editor/actions";
 
 type Props = {
   article: ArticleType;
@@ -25,7 +27,11 @@ const ArticleSection: FC<Props> = ({ article }) => {
       if (status) {
         dispatch(setError(true, status));
         loading = false;
-      } else history.push("/");
+      } else {
+        history.replace("/");
+        dispatch(removeArticle(article.id));
+        dispatch(removeEditor(article.id));
+      }
     }
   };
   return (

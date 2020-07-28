@@ -10,7 +10,7 @@ export const loadArticles = (): ThunkResult<Promise<void>> => async (
   dispatch
 ) => {
   const { res, status } = await fetcher.get<ArticleType[]>(ALL_ARTICLES_URL);
-  if (status) {
+  if (status || !res) {
     dispatch(setError(true, status));
     return;
   }
@@ -42,7 +42,7 @@ export const loadArticle = (key: string): ThunkResult<Promise<void>> => async (
   dispatch
 ) => {
   const { res, status } = await fetcher.get<ArticleType>(getArticleUrl(key));
-  if (status) {
+  if (status || !res) {
     dispatch(setError(true, status));
     return;
   }
@@ -52,7 +52,9 @@ export const loadArticle = (key: string): ThunkResult<Promise<void>> => async (
   });
 };
 
-export const removeArticle = (key: string): ThunkResult => (dispatch) => {
+export const removeArticle = (key: number | string): ThunkResult => (
+  dispatch
+) => {
   dispatch({
     type: StoreActionTypes.REMOVE_ARTICLE,
     payload: key,

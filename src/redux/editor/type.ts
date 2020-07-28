@@ -12,7 +12,7 @@ type SetEditor = {
 
 type RemoveEditor = {
   type: EditorActionTypes.REMOVE_EDITOR;
-  payload: string;
+  payload: number | string;
 };
 
 export type EditorActions = SetEditor | RemoveEditor;

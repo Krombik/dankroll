@@ -50,7 +50,7 @@ const Editor: FC = () => {
     setLoading(true);
     const { res, status } = await editArticle(postId, editor);
     setLoading(false);
-    if (status) dispatch(setError(true, status));
+    if (status || !res) dispatch(setError(true, status));
     else {
       dispatch(removeEditor(postId));
       history.push(`/article/${res.id}`);

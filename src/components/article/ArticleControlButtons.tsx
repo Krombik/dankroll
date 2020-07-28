@@ -9,7 +9,7 @@ type Props = {
   onDelete?: () => void;
 };
 
-const ArticleControlButtons: FC<Props> = ({ id, onDelete = null }) => (
+const ArticleControlButtons: FC<Props> = ({ id, onDelete }) => (
   <>
     <TooltipIconLink
       to={`/article/${id}/edit`}

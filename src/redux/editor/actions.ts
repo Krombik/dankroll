@@ -21,7 +21,7 @@ export const createEditor = (key: string): ThunkResult<Promise<void>> => async (
   let editor: ArticleEditorType;
   if (key !== "new") {
     const { res, status } = await fetcher.get<ArticleType>(getArticleUrl(key));
-    if (status) {
+    if (status || !res) {
       dispatch(setError(true, status));
       return;
     }
@@ -33,7 +33,9 @@ export const createEditor = (key: string): ThunkResult<Promise<void>> => async (
   });
 };
 
-export const removeEditor = (key: string): ThunkResult => (dispatch) => {
+export const removeEditor = (key: number | string): ThunkResult => (
+  dispatch
+) => {
   dispatch({
     type: EditorActionTypes.REMOVE_EDITOR,
     payload: key,

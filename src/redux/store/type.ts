@@ -20,7 +20,7 @@ type SetArticle = {
 
 type RemoveArticle = {
   type: StoreActionTypes.REMOVE_ARTICLE;
-  payload: string;
+  payload: number | string;
 };
 
 type AddComment = {

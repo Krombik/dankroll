@@ -1,51 +1,50 @@
 import axios, { AxiosResponse } from "axios";
-import { FetchRV } from "../types";
 
 const fetcher = {
-  async get<T>(url: string): Promise<FetchRV<T>> {
+  async get<T>(url: string) {
     try {
-      return { res: (await axios.get(url)).data };
+      return { res: (await axios.get<T>(url)).data };
     } catch (error) {
-      const { data, status } = error.response as AxiosResponse;
-      return { res: data, status };
+      const { status } = error.response as AxiosResponse;
+      return { status };
     }
   },
-  async delete<T>(url: string): Promise<FetchRV<T>> {
+  async delete<T>(url: string) {
     try {
-      return { res: (await axios.delete(url)).data };
+      return { res: (await axios.delete<T>(url)).data };
     } catch (error) {
-      const { data, status } = error.response as AxiosResponse;
-      return { res: data, status };
+      const { status } = error.response as AxiosResponse;
+      return { status };
     }
   },
-  async post<T>(url: string, content?: any): Promise<FetchRV<T>> {
+  async post<T>(url: string, content?: any) {
     try {
       const { data } = await (content
-        ? axios.post(url, JSON.stringify(content), {
+        ? axios.post<T>(url, JSON.stringify(content), {
             headers: {
               "Content-Type": "application/json",
             },
           })
-        : axios.post(url));
+        : axios.post<T>(url));
       return { res: data };
     } catch (error) {
-      const { data, status } = error.response as AxiosResponse;
-      return { res: data, status };
+      const { status } = error.response as AxiosResponse;
+      return { status };
     }
   },
-  async put<T>(url: string, content?: any): Promise<FetchRV<T>> {
+  async put<T>(url: string, content?: any) {
     try {
       const { data } = await (content
-        ? axios.put(url, JSON.stringify(content), {
+        ? axios.put<T>(url, JSON.stringify(content), {
             headers: {
               "Content-Type": "application/json",
             },
           })
-        : axios.put(url));
+        : axios.put<T>(url));
       return { res: data };
     } catch (error) {
-      const { data, status } = error.response as AxiosResponse;
-      return { res: data, status };
+      const { status } = error.response as AxiosResponse;
+      return { status };
     }
   },
 };

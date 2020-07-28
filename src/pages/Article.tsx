@@ -21,8 +21,8 @@ const Article: FC = () => {
   const dispatch = useDispatch<ThunkDispatcher>();
   useEffect(() => {
     dispatch(loadArticle(postId));
-  });
-  if (!articlePages || !articlePages[postId]) return <Spinner />;
+  }, []);
+  if (!articlePages[postId]) return <Spinner />;
   return (
     <Grid item container spacing={3}>
       <ArticleSection article={articlePages[postId]} />

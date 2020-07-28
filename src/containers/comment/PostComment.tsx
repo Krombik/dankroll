@@ -25,12 +25,12 @@ const PostComment: FC<Props> = ({ postId }) => {
   const postComment = async () => {
     if (body.trim().length > 0) {
       setLoading(true);
-      const data = await createArticleComment({ postId, body });
-      if (!data.status) {
-        dispatch(addComment(postId, data.res));
+      const { res, status } = await createArticleComment({ postId, body });
+      if (res && !status) {
+        dispatch(addComment(postId, res));
         setComment("");
       } else {
-        dispatch(setError(true, data.status));
+        dispatch(setError(true, status));
       }
       setLoading(false);
     }

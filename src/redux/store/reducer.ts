@@ -3,11 +3,11 @@ import { ArticlesObj, ArticleType } from "../../types/article";
 
 type State = {
   articlePages: ArticlesObj;
-  articles: ArticleType[];
+  articles: ArticleType[] | null;
 };
 
 const initialState: State = {
-  articlePages: null,
+  articlePages: {},
   articles: null,
 };
 
