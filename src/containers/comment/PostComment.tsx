@@ -1,21 +1,24 @@
-import Grid from "@material-ui/core/Grid";
 import React, { FC, useState, useCallback, ChangeEvent } from "react";
+import Grid from "@material-ui/core/Grid";
+import { CommentType, CommentsObj } from "types/comment";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardActions from "@material-ui/core/CardActions";
-import { ThunkDispatcher } from "../../types";
-import { createArticleComment } from "../../api/comment";
+import { FetchRV, ThunkDispatcher } from "types";
+import { createArticleComment } from "api/comment";
 import { useDispatch } from "react-redux";
-import { setError } from "../../redux/error/actions";
-import { addComment } from "../../redux/store/actions";
+import { setError } from "redux/error/actions";
 
 type Props = {
-  postId: number;
+  slug: string;
+  token: string;
+  mutate: (data: FetchRV<CommentsObj>, shouldRevalidate?: boolean) => any;
+  comments: CommentType[];
 };
 
-const PostComment: FC<Props> = ({ postId }) => {
+const PostComment: FC<Props> = ({ slug, token, mutate, comments }) => {
   const [loading, setLoading] = useState(false);
   const [body, setComment] = useState("");
   const handleComment = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -25,12 +28,12 @@ const PostComment: FC<Props> = ({ postId }) => {
   const postComment = async () => {
     if (body.trim().length > 0) {
       setLoading(true);
-      const { res, status } = await createArticleComment({ postId, body });
-      if (res && !status) {
-        dispatch(addComment(postId, res));
+      const data = await createArticleComment(slug, { body }, token);
+      if (data.comment) {
+        mutate({ comments: [data.comment, ...comments] }, false);
         setComment("");
       } else {
-        dispatch(setError(true, status));
+        dispatch(setError(true, data));
       }
       setLoading(false);
     }

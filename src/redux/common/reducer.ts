@@ -1,4 +1,4 @@
-import { CommonActionTypes, CommonActions } from "./type";
+import { ActionTypes, CommonActions } from "./type";
 
 type State = {
   dark: boolean;
@@ -13,7 +13,7 @@ export default function reducer(
   action: CommonActions
 ): State {
   switch (action.type) {
-    case CommonActionTypes.SET_DARK:
+    case ActionTypes.SET_DARK:
       return {
         ...state,
         dark: action.payload,

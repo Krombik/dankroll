@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -13,6 +14,7 @@
     "noEmit": true,
     "noImplicitThis": true,
     "preserveConstEnums": true,
+    "noUnusedLocals": true,
     "removeComments": false,
     "resolveJsonModule": true,
     "skipLibCheck": true,

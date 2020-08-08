@@ -1,9 +1,9 @@
-export enum CommonActionTypes {
+export enum ActionTypes {
   SET_DARK = "SET_DARK",
 }
 
 type SetDark = {
-  type: CommonActionTypes.SET_DARK;
+  type: ActionTypes.SET_DARK;
   payload: boolean;
 };
 

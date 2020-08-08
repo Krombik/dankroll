@@ -1,52 +1,70 @@
-import { ArticleType } from "../../types/article";
+import React, { FC, useEffect } from "react";
+import { ArticleObj } from "types/article";
 import Grid from "@material-ui/core/Grid";
-import React, { FC } from "react";
-import Banner from "../common/Banner";
-import Typography from "@material-ui/core/Typography";
-import ArticleControlButtons from "../../components/article/ArticleControlButtons";
+import { getArticleUrl } from "api/article";
+import ArticleBanner from "components/article/ArticleBanner";
+import Markdown from "react-markdown";
+import Link from "@material-ui/core/Link";
+import Divider from "@material-ui/core/Divider";
+import { FetchRV, ThunkDispatcher } from "types";
+import Spinner from "components/common/Spinner";
+import ArticleControlButtons from "./ArticleControlButtons";
+import ArticleLikeButton from "./ArticleLikeButton";
 import { useDispatch } from "react-redux";
-import { ThunkDispatcher } from "../../types";
-import { deleteArticle } from "../../api/article";
-import { setError } from "../../redux/error/actions";
-import { useHistory } from "react-router-dom";
-import { removeArticle } from "../../redux/store/actions";
-import { removeEditor } from "../../redux/editor/actions";
+import { setError } from "redux/error/actions";
+import Gutter from "components/common/Gutter";
+import useSWR from "swr";
+import fetcher from "utils/fetcher";
 
 type Props = {
-  article: ArticleType;
+  slug: string;
+  token: string;
+  currentUserName: string;
 };
 
-const ArticleSection: FC<Props> = ({ article }) => {
+const ArticleSection: FC<Props> = ({ slug, token, currentUserName }) => {
+  const { data, mutate } = useSWR<FetchRV<ArticleObj>>(
+    [getArticleUrl(slug), token],
+    fetcher.get
+  );
   const dispatch = useDispatch<ThunkDispatcher>();
-  const history = useHistory();
-  let loading = false;
-  const handleDelete = async () => {
-    if (!loading) {
-      loading = true;
-      const { status } = await deleteArticle(article.id);
-      if (status) {
-        dispatch(setError(true, status));
-        loading = false;
-      } else {
-        history.replace("/");
-        dispatch(removeArticle(article.id));
-        dispatch(removeEditor(article.id));
-      }
-    }
-  };
+  useEffect(() => {
+    if (data?.status) dispatch(setError(true, data));
+  }, [data]);
+  if (!data) return <Spinner />;
+  const { article } = data;
+  if (data.status || !article) return null;
   return (
     <>
-      <Grid item xs={12}>
-        <Banner>
-          <Typography variant="h2" color="textPrimary">
-            {article.title}
-            <ArticleControlButtons id={article.id} onDelete={handleDelete} />
-          </Typography>
-        </Banner>
-      </Grid>
-      <Grid item xs={12}>
-        {article.body}
-      </Grid>
+      <ArticleBanner
+        article={article}
+        controlButtons={
+          <>
+            <ArticleLikeButton
+              like={article.favorited}
+              likesCount={article.favoritesCount}
+              slug={article.slug}
+              token={token}
+              mutate={mutate}
+            />
+            {currentUserName === article.author.username && (
+              <ArticleControlButtons article={article} token={token} />
+            )}
+          </>
+        }
+      />
+      <Gutter>
+        <Grid item xs={12}>
+          <Markdown
+            source={article.body}
+            skipHtml={true}
+            renderers={{
+              link: Link,
+              thematicBreak: Divider,
+            }}
+          />
+        </Grid>
+      </Gutter>
     </>
   );
 };

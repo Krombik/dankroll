@@ -1,15 +1,15 @@
-import { ErrorActionTypes, ErrorActions } from "./type";
+import { ActionTypes, ErrorActions } from "./type";
 
 type State = {
-  error: boolean;
-  errorText: string;
-  errorStatus: number;
+  show: boolean;
+  text: string;
+  status: number;
 };
 
 const initialState: State = {
-  error: false,
-  errorText: "",
-  errorStatus: 0,
+  show: false,
+  text: "",
+  status: 0,
 };
 
 export default function reducer(
@@ -17,7 +17,7 @@ export default function reducer(
   action: ErrorActions
 ): State {
   switch (action.type) {
-    case ErrorActionTypes.SET_ERROR:
+    case ActionTypes.SET_ERROR:
       return {
         ...state,
         ...action.payload,

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton, { IconButtonProps } from "@material-ui/core/IconButton";
 
@@ -6,14 +6,14 @@ type Props = {
   tooltip: string;
 };
 
-const TooltipIconButton: FC<Props & IconButtonProps> = ({
+const TooltipIconButton = <C extends React.ElementType>({
   tooltip,
   ...props
-}) => (
-  <Tooltip title={tooltip}>
-    <span>
+}: IconButtonProps<C, { component?: C }> & Props) => (
+  <Tooltip title={props.disabled ? "Log in first" : tooltip}>
+    <div className="tooltip-button-wrapper">
       <IconButton color="inherit" {...props} />
-    </span>
+    </div>
   </Tooltip>
 );
 

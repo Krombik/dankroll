@@ -1,12 +1,14 @@
 import { EditorActionTypes, EditorActions } from "./type";
-import { ArticleEditorType } from "../../types/article";
+import { ArticleEditorType, ArticleCurrentEditorType } from "types/article";
 
 type State = {
-  editors: { [key: string]: ArticleEditorType };
+  editors: { [key: string]: Partial<ArticleEditorType> };
+  current: ArticleCurrentEditorType | null;
 };
 
 const initialState: State = {
   editors: {},
+  current: null,
 };
 
 export default function reducer(
@@ -25,10 +27,25 @@ export default function reducer(
           },
         },
       };
+    case EditorActionTypes.CREATE_EDITOR:
+      return {
+        ...state,
+        editors: {
+          ...state.editors,
+          [action.payload.key]: {},
+        },
+        current: action.payload.editor,
+      };
+    case EditorActionTypes.SET_CURRENT:
+      return {
+        ...state,
+        current: action.payload,
+      };
     case EditorActionTypes.REMOVE_EDITOR:
       return {
         ...state,
         editors: (({ [action.payload]: _, ...rest }) => rest)(state.editors),
+        current: null,
       };
     default:
       return state;

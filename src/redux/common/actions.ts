@@ -1,9 +1,9 @@
-import { ThunkResult } from "../../types";
-import { CommonActionTypes } from "./type";
+import { ThunkResult } from "types";
+import { ActionTypes } from "./type";
 
 export const setDark = (isDark: boolean): ThunkResult => (dispatch) => {
   dispatch({
-    type: CommonActionTypes.SET_DARK,
+    type: ActionTypes.SET_DARK,
     payload: isDark,
   });
 };
