@@ -9,12 +9,13 @@ import { State, FetchRV, ThunkDispatcher } from "types";
 import Spinner from "components/common/Spinner";
 import Banner from "../common/Banner";
 import UserSubscribeButton from "./UserSubscribeButton";
-import UserSettingsButton from "./UserSettingsButton";
+import SettingsIcon from "@material-ui/icons/Settings";
 import { getUserUrl } from "api/user";
 import { setError } from "redux/error/actions";
 import useSWR from "swr";
 import fetcher from "utils/fetcher";
-import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import TooltipIconButton from "components/common/TooltipIconButton";
 
 const selectData = createSelector(
   (state: State) => state.authentication.token,
@@ -22,11 +23,14 @@ const selectData = createSelector(
   (token, currentUserName) => ({ token, currentUserName })
 );
 
-const UserSection: FC = () => {
+type Props = {
+  username: string;
+};
+
+const UserSection: FC<Props> = ({ username }) => {
   const { token, currentUserName } = useSelector(selectData);
-  const { username } = useParams();
   const { data, mutate } = useSWR<FetchRV<UserObj>>(
-    [getUserUrl(username as string), token],
+    [getUserUrl(username), token],
     fetcher.get
   );
   const dispatch = useDispatch<ThunkDispatcher>();
@@ -55,7 +59,16 @@ const UserSection: FC = () => {
                 mutate={mutate}
               />
             ) : (
-              <UserSettingsButton />
+              <TooltipIconButton
+                tooltip="Profile settings"
+                component={Link}
+                to={{
+                  pathname: "/settings",
+                  state: { open: true },
+                }}
+              >
+                <SettingsIcon fontSize="inherit" color="inherit" />
+              </TooltipIconButton>
             )}
           </Typography>
         </Grid>

@@ -4,8 +4,7 @@
     [
       "babel-plugin-styled-components",
       {
-        "displayName": false,
-        "preprocess": true
+        "displayName": false
       }
     ]
   ]

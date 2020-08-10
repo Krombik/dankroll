@@ -5,10 +5,10 @@ import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { State, ThunkDispatcher } from "types";
 import { useDispatch } from "react-redux";
-import { moveTab, removeTab } from "redux/articleTabs/actions";
+import { moveTab, removeTab, setTab } from "redux/articleTabs/actions";
 import AddNewTabButton from "./AddNewTabButton";
 import SortableList from "../common/SortableList";
-import Tabs, { TabsProps } from "./Tabs";
+import Tabs, { TabsProps } from "@material-ui/core/Tabs";
 import { TabValues } from "utils/constant";
 
 const selectData = createSelector(
@@ -20,7 +20,7 @@ const selectData = createSelector(
   })
 );
 
-const SortableTabs: FC<TabsProps> = memo(({ currTab }) => {
+const SortableTabs: FC<TabsProps> = memo((props) => {
   const { tabList, currentUserName } = useSelector(selectData);
   const dispatch = useDispatch<ThunkDispatcher>();
   const onSortEnd = useCallback(({ oldIndex, newIndex }) => {
@@ -30,6 +30,9 @@ const SortableTabs: FC<TabsProps> = memo(({ currTab }) => {
     e.stopPropagation();
     dispatch(removeTab(e.currentTarget.value));
   }, []);
+  const handleChange = useCallback((_: any, tabKey: string) => {
+    if (tabKey !== TabValues.ADD) dispatch(setTab(tabKey));
+  }, []);
   return (
     <SortableList
       axis="x"
@@ -38,7 +41,12 @@ const SortableTabs: FC<TabsProps> = memo(({ currTab }) => {
       onSortEnd={onSortEnd}
       helperClass="dragging"
     >
-      <Tabs currTab={currTab}>
+      <Tabs
+        onChange={handleChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        {...props}
+      >
         {currentUserName && (
           <Tab value={TabValues.FEED} label={`${currentUserName}'s feed`} />
         )}

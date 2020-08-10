@@ -1,18 +1,19 @@
 import React from "react";
-import { SvgIconProps, SvgIconTypeMap } from "@material-ui/core";
+import { SvgIconProps, SvgIconTypeMap, Theme } from "@material-ui/core";
 import { OverridableComponent } from "@material-ui/core/OverridableComponent";
-import styled from "styled-components/macro";
+import styled, { ThemeProps } from "styled-components/macro";
 
-interface Props extends SvgIconProps {
+type Props = {
   active: boolean;
   Icon: OverridableComponent<SvgIconTypeMap>;
-}
+};
 
-const SwitchableIcon = styled(({ active, Icon, ...props }: Props) => (
-  <Icon {...props} />
-))`
+const SwitchableIcon = styled(
+  ({ active, Icon, ...props }: Props & SvgIconProps) => <Icon {...props} />
+)`
   path:first-child {
-    transition: 0.3s;
+    transition: ${({ theme }: ThemeProps<Theme>) =>
+      theme.transitions.create("opacity")};
     opacity: ${({ active }) => (active ? 0.5 : 0)};
   }
 `;

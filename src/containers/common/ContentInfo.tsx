@@ -1,10 +1,7 @@
-import React, { FC, useCallback } from "react";
+import React, { FC } from "react";
 import CardHeader, { CardHeaderProps } from "@material-ui/core/CardHeader";
 import Avatar from "@material-ui/core/Avatar";
 import MuiLink from "@material-ui/core/Link";
-import { useDispatch } from "react-redux";
-import { ThunkDispatcher } from "types";
-import { setModal } from "redux/modal/actions";
 import { Link } from "react-router-dom";
 
 type Props = {
@@ -19,21 +16,12 @@ const ContentInfo: FC<Props & CardHeaderProps> = ({
   date,
   ...props
 }) => {
-  const dispatch = useDispatch<ThunkDispatcher>();
-  const closeModal = useCallback(() => {
-    dispatch(setModal(false));
-  }, []);
   const isNotSkeleton = typeof username === "string";
   return (
     <CardHeader
       avatar={
         isNotSkeleton ? (
-          <MuiLink
-            color="inherit"
-            component={Link}
-            to={`/user/${username}`}
-            onClick={closeModal}
-          >
+          <MuiLink color="inherit" component={Link} to={`/user/${username}`}>
             <Avatar src={avatar as string}>{username[0]}</Avatar>
           </MuiLink>
         ) : (
@@ -42,12 +30,7 @@ const ContentInfo: FC<Props & CardHeaderProps> = ({
       }
       title={
         isNotSkeleton ? (
-          <MuiLink
-            color="inherit"
-            component={Link}
-            to={`/user/${username}`}
-            onClick={closeModal}
-          >
+          <MuiLink color="inherit" component={Link} to={`/user/${username}`}>
             {username}
           </MuiLink>
         ) : (

@@ -1,29 +1,22 @@
 import { ThunkResult } from "types";
-import { ActionTypes, ModalType, SetModalPayload } from "./type";
+import { ActionTypes } from "./type";
+import { push, replace } from "connected-react-router";
+import { Location } from "history";
 
-export const setArticleListRefreshFunc = (
-  refresh: (...args: any) => any
-): ThunkResult => (dispatch) => {
-  dispatch({
-    type: ActionTypes.SET_REFRESH_FUNC,
-    payload: refresh,
-  });
+export const closeModal = (isReplace?: boolean): ThunkResult => (
+  dispatch,
+  getState
+) => {
+  const { prevLocation } = getState().modal;
+  const arg = prevLocation || ("/" as any);
+  dispatch(isReplace ? replace(arg) : push(arg));
 };
 
-export const setModal = (
-  open: boolean,
-  modal?: ModalType,
-  slug?: string
-): ThunkResult => (dispatch, getState) => {
-  const payload: SetModalPayload = { open };
-  if (!open) {
-    const { refreshArticleList, modal } = getState().modal;
-    if (refreshArticleList && modal === "article") refreshArticleList();
-  }
-  if (modal) payload.modal = modal;
-  if (slug) payload.slug = slug;
+export const setPrevLocation = (location: Location): ThunkResult => (
+  dispatch
+) => {
   dispatch({
-    type: ActionTypes.SET_MODAL,
-    payload,
+    type: ActionTypes.SET_PREV_LOCATION,
+    payload: location,
   });
 };

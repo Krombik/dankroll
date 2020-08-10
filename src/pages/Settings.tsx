@@ -13,7 +13,6 @@ import { updateCurrentUser, getCurrentUser } from "api/user";
 import { setError } from "redux/error/actions";
 import { setAuthorized } from "redux/authentication/actions";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import { setModal } from "redux/modal/actions";
 import { createSelector } from "reselect";
 import { useSelector, useDispatch } from "react-redux";
 import { State, ThunkDispatcher, FetchRV } from "types";
@@ -21,6 +20,7 @@ import useSWR from "swr";
 import { AuthorizedUserObj, AuthorizedUserType, UpdateUser } from "types/user";
 import Gutter from "components/common/Gutter";
 import { replace } from "connected-react-router";
+import { closeModal } from "redux/modal/actions";
 
 const selectData = createSelector(
   (state: State) => state.authentication.token,
@@ -76,12 +76,11 @@ const Settings: FC = () => {
         currUserData.current = null;
         dispatch(replace(`/user/${data.user.username}`));
         dispatch(setAuthorized(data.user.token, data.user.username));
-        dispatch(setModal(false));
+        dispatch(closeModal());
       } else {
         dispatch(setError(true, data));
       }
-    }
-    setLoading(false);
+    } else setLoading(false);
   };
   return (
     <Gutter

@@ -1,31 +1,12 @@
+import { Location } from "history";
+
 export enum ActionTypes {
-  SET_MODAL = "SET_MODAL",
-  SET_REFRESH_FUNC = "SET_REFRESH_FUNC",
+  SET_PREV_LOCATION = "SET_PREV_LOCATION",
 }
 
-export type ModalType =
-  | "new"
-  | "edit"
-  | "register"
-  | "login"
-  | "article"
-  | "settings"
-  | "";
-
-export type SetModalPayload = {
-  open: boolean;
-  modal?: ModalType;
-  slug?: string;
+type SetPrevLocation = {
+  type: ActionTypes.SET_PREV_LOCATION;
+  payload: Location;
 };
 
-type SetModal = {
-  type: ActionTypes.SET_MODAL;
-  payload: SetModalPayload;
-};
-
-type SetRefreshFunc = {
-  type: ActionTypes.SET_REFRESH_FUNC;
-  payload: (...args: any) => any;
-};
-
-export type ModalActions = SetModal | SetRefreshFunc;
+export type ModalActions = SetPrevLocation;

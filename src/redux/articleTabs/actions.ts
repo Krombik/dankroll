@@ -21,11 +21,15 @@ export const setOffset = (offset: number): ThunkResult => (
   });
 };
 
-export const setTab = (tabKey: string): ThunkResult => (dispatch, getState) => {
+export const setTab = (tabKey: string, skipValue?: boolean): ThunkResult => (
+  dispatch,
+  getState
+) => {
   dispatch(
     push({
       search: tabKeyToQueryString({
         tabKey,
+        skipValue,
         page: getState().articleTabs.tabPages[tabKey],
       }),
     })

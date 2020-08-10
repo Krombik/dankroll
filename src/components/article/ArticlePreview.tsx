@@ -7,7 +7,6 @@ import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import ContentInfo from "../../containers/common/ContentInfo";
 import { Link } from "react-router-dom";
-import { Location } from "history";
 
 type Props = {
   avatar: string | JSX.Element;
@@ -16,9 +15,7 @@ type Props = {
   likeButton: JSX.Element;
   title: string | JSX.Element;
   description: string | JSX.Element;
-  href?: string;
-  onModal?: (e: any) => void;
-  location?: Location;
+  pathname?: string;
 };
 
 const ArticlePreview: FC<Props> = ({
@@ -28,10 +25,8 @@ const ArticlePreview: FC<Props> = ({
   likeButton,
   title,
   description,
-  location,
   children,
-  onModal,
-  href = "",
+  pathname = "",
 }) => (
   <Grid item container xs={12} lg={6}>
     <Grid component={Card} item xs={12}>
@@ -51,10 +46,9 @@ const ArticlePreview: FC<Props> = ({
         <Button
           variant="contained"
           color="primary"
-          disabled={!href}
+          disabled={!pathname}
           component={Link}
-          onClick={onModal}
-          to={{ pathname: href, state: { prevLocation: location } }}
+          to={{ pathname, state: { open: true } }}
         >
           Read more
         </Button>

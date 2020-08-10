@@ -4,17 +4,16 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { getArticlesUrl } from "api/article";
 import Pagination from "../common/Pagination";
-import { FetchRV, State, ThunkDispatcher } from "types";
+import { FetchRV, State } from "types";
 import { createSelector } from "reselect";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import usePrevious from "utils/usePrevious";
-import { setArticleListRefreshFunc, setModal } from "redux/modal/actions";
 import ArticlePreviewSection from "./ArticlePreviewSection";
 import ArticlePreviewSkeletonSection from "./ArticlePreviewSkeletonSection";
 import Typography from "@material-ui/core/Typography";
 import { useSWRInfinite } from "swr";
 import fetcher from "utils/fetcher";
-import { ModalType } from "redux/modal/type";
+import { useHistory } from "react-router-dom";
 
 const selectData = createSelector(
   (state: State) => state.authentication.token,
@@ -31,7 +30,6 @@ type Props = {
 
 const ArticleList: FC<Props> = memo(({ page, type, value, tabKey }) => {
   const { token, offset } = useSelector(selectData);
-  const dispatch = useDispatch<ThunkDispatcher>();
   const prevQuery = usePrevious({ type, value });
   const startPage = page && +page > 0 ? +page - 1 : 0;
   const { data, setSize, size, mutate } = useSWRInfinite<FetchRV<ArticlesObj>>(
@@ -51,27 +49,15 @@ const ArticleList: FC<Props> = memo(({ page, type, value, tabKey }) => {
     )
       setSize(1);
   }, [page]);
+  const history = useHistory();
   useEffect(() => {
-    dispatch(setArticleListRefreshFunc(mutate));
-    const handleRouteChange = async () => {
-      const { pathname: url } = window.location;
-      let isModalShouldBeOpen = true;
-      let modal: ModalType | undefined;
-      let slug: string | undefined;
-      if (url.startsWith("/articles/")) {
-        slug = url.replace("/articles/", "");
-        if (url.endsWith("/edit")) {
-          modal = "edit";
-          slug = slug.replace("/edit", "");
-        } else modal = "article";
-      } else if (url.startsWith("/new")) modal = "new";
-      else isModalShouldBeOpen = false;
-      dispatch(setModal(isModalShouldBeOpen, modal, slug));
-    };
-    window.addEventListener("popstate", handleRouteChange);
-    return () => {
-      window.removeEventListener("popstate", handleRouteChange);
-    };
+    let prev = false;
+    return history.listen((location) => {
+      if (prev) mutate();
+      prev =
+        location.pathname.startsWith("/articles/") &&
+        !location.pathname.endsWith("/edit");
+    });
   }, []);
   if (!data || !size || !setSize)
     return <ArticlePreviewSkeletonSection count={offset} />;

@@ -1,13 +1,22 @@
-import { TabQuery } from "types/tab";
+import { TabQuery } from "types";
 import { TabValues } from "./constant";
 import { stringify } from "query-string";
 import { XOR } from "types";
 
-type Props = XOR<{ type: string; value: string }, { tabKey: string }> & {
+type Props = XOR<
+  { type: string; value: string },
+  { tabKey: string; skipValue?: boolean }
+> & {
   page?: number;
 };
 
-const tabKeyToQueryString = ({ type, value, tabKey, page }: Props) => {
+const tabKeyToQueryString = ({
+  type,
+  value,
+  tabKey,
+  page,
+  skipValue,
+}: Props) => {
   let query: TabQuery;
   if (tabKey) {
     const keySeparatorIndex = tabKey.indexOf("-");
@@ -16,7 +25,7 @@ const tabKeyToQueryString = ({ type, value, tabKey, page }: Props) => {
         ? { type: tabKey }
         : {
             type: tabKey.slice(0, keySeparatorIndex),
-            value: tabKey.slice(keySeparatorIndex + 1),
+            value: skipValue ? undefined : tabKey.slice(keySeparatorIndex + 1),
           };
   } else {
     query = { type, value };

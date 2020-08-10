@@ -1,20 +1,36 @@
-import React, { FC } from "react";
+import React, { FC, useRef, useEffect, useCallback } from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
-import Home from "pages";
-import NewArticlePage from "../pages/new";
-import ArticlesRouter from "./ArticlesRouter";
-import UserPage from "../pages/user/[username]";
-import { LocationState } from "types";
+import Home from "pages/Home";
+import { LocationState, ThunkDispatcher } from "types";
+import ModalRouter from "./ModalRouter";
+import User from "pages/User";
+import { Location } from "history";
+import { useDispatch } from "react-redux";
+import { setPrevLocation, closeModal } from "redux/modal/actions";
+import Modal from "components/common/Modal";
 
 const AppRouter: FC = () => {
   const location = useLocation<LocationState>();
+  const close = !location.state?.open;
+  const prevLocation = useRef<Location>();
+  const dispatch = useDispatch<ThunkDispatcher>();
+  const handleClose = useCallback(() => {
+    dispatch(closeModal());
+  }, []);
+  useEffect(() => {
+    if (close) dispatch(setPrevLocation((prevLocation.current = location)));
+  });
   return (
-    <Switch location={location.state?.prevLocation || location}>
-      <Route path="/articles" children={ArticlesRouter} />
-      <Route exact path="/" component={Home} />
-      <Route exact path="/new" component={NewArticlePage} />
-      <Route exact path="/user/:username" component={UserPage} />
-    </Switch>
+    <>
+      <Switch location={close ? location : prevLocation.current}>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/user/:username" component={User} />
+        <ModalRouter />
+      </Switch>
+      <Modal open={!close} onClose={handleClose}>
+        <ModalRouter />
+      </Modal>
+    </>
   );
 };
 

@@ -1,15 +1,13 @@
-import React, { FC, MouseEvent, useCallback, useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import { ArticlesObj, ArticleType } from "types/article";
 import { likeArticle } from "api/article";
 import { FetchRV, ThunkDispatcher } from "types";
 import { useDispatch } from "react-redux";
 import cloneDeep from "lodash.clonedeep";
-import { setModal } from "redux/modal/actions";
 import ArticlePreview from "components/article/ArticlePreview";
 import ArticlePreviewLikeButton from "./ArticlePreviewLikeButton";
 import TagList from "../tag/TagList";
 import { setError } from "redux/error/actions";
-import { useLocation } from "react-router-dom";
 
 type Props = {
   data: FetchRV<ArticlesObj>[];
@@ -23,7 +21,6 @@ const ArticlePreviewSection: FC<Props> = ({ data, token, mutate, offset }) => {
     .filter(({ articles }) => !!articles)
     .flatMap(({ articles }) => articles) as ArticleType[];
   const dispatch = useDispatch<ThunkDispatcher>();
-  const location = useLocation();
   useEffect(() => {
     const lastData = data[data.length - 1];
     if (lastData.status) dispatch(setError(true, lastData));
@@ -40,16 +37,11 @@ const ArticlePreviewSection: FC<Props> = ({ data, token, mutate, offset }) => {
     dispatch(setError(true, res));
     return false;
   };
-  const handleModal = useCallback((e: MouseEvent<HTMLAnchorElement>) => {
-    const path = e.currentTarget.pathname;
-    dispatch(setModal(true, "article", path.replace("/articles/", "")));
-  }, []);
   return (
     <>
       {articles.map((article, index) => (
         <ArticlePreview
           key={index}
-          location={location}
           avatar={article.author.image}
           username={article.author.username}
           date={
@@ -68,8 +60,7 @@ const ArticlePreviewSection: FC<Props> = ({ data, token, mutate, offset }) => {
           }
           title={article.title}
           description={article.description}
-          onModal={handleModal}
-          href={"/articles/" + article.slug}
+          pathname={"/articles/" + article.slug}
         >
           {article?.tagList.length > 0 && <TagList tagList={article.tagList} />}
         </ArticlePreview>

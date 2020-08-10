@@ -17,7 +17,7 @@ const authenticationConfig: PersistConfig<any> = {
   storage: storage,
   whitelist: ["token"],
   migrate: async (state: any, version) =>
-    version === -1
+    version === -1 && state.token
       ? {
           ...state,
           currentUserName:

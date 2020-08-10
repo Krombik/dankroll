@@ -3,7 +3,6 @@ import Chip from "@material-ui/core/Chip";
 import { useDispatch } from "react-redux";
 import { ThunkDispatcher } from "types";
 import { addTab } from "redux/articleTabs/actions";
-import { setModal } from "redux/modal/actions";
 import Grid from "@material-ui/core/Grid";
 
 type Props = {
@@ -12,13 +11,9 @@ type Props = {
 
 const TagList: FC<Props> = ({ tagList }) => {
   const dispatch = useDispatch<ThunkDispatcher>();
-  const handleAddTab = useCallback(
-    async (e: SyntheticEvent<HTMLButtonElement>) => {
-      dispatch(addTab(e.currentTarget.value));
-      dispatch(setModal(false));
-    },
-    []
-  );
+  const handleAddTab = useCallback((e: SyntheticEvent<HTMLButtonElement>) => {
+    dispatch(addTab(e.currentTarget.value));
+  }, []);
   return (
     <>
       {tagList.map((tag, index) => (

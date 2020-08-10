@@ -8,14 +8,13 @@ import React, {
 import "styled-components/macro";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import EditableTagList from "../tag/EditableTagList";
+import EditableTagList from "containers/tag/EditableTagList";
 import { ArticleEditorType, ArticleObj } from "types/article";
 import { createArticle, updateArticle, getArticleUrl } from "api/article";
 import { createSelector } from "reselect";
 import { useSelector, useDispatch } from "react-redux";
-import { State, ThunkDispatcher, FetchRV, LocationState } from "types";
+import { State, ThunkDispatcher, FetchRV, UrlParams } from "types";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import { setModal } from "redux/modal/actions";
 import { setError } from "redux/error/actions";
 import {
   setEditor,
@@ -25,8 +24,8 @@ import {
 import { mutate } from "swr";
 import Gutter from "components/common/Gutter";
 import Typography from "@material-ui/core/Typography";
-import { useLocation } from "react-router-dom";
-import { replace, push } from "connected-react-router";
+import { push } from "connected-react-router";
+import { RouteComponentProps } from "react-router-dom";
 
 const selectData = createSelector(
   (state: State) => state.authentication.token,
@@ -35,11 +34,11 @@ const selectData = createSelector(
   (token, editors, currentEditor) => ({ token, editors, currentEditor })
 );
 
-type Props = {
-  slug?: string;
-};
-
-const Editor: FC<Props> = ({ slug }) => {
+const Editor: FC<RouteComponentProps<UrlParams>> = ({
+  match: {
+    params: { slug },
+  },
+}) => {
   const key = slug ? `_${slug}` : "new";
   const [loading, setLoading] = useState(false);
   const { token, editors, currentEditor } = useSelector(selectData);
@@ -64,7 +63,6 @@ const Editor: FC<Props> = ({ slug }) => {
   const handleResetEditor = useCallback(() => {
     dispatch(removeEditor(key));
   }, [key]);
-  const { state } = useLocation<LocationState>();
   const handleArticleEdit = async () => {
     setLoading(true);
     let data: FetchRV<ArticleObj>;
@@ -96,13 +94,12 @@ const Editor: FC<Props> = ({ slug }) => {
       dispatch(removeEditor(key));
       if (slug === data.article.slug)
         mutate([getArticleUrl(slug), token], data, false);
-      const pathname = `/articles/${data.article.slug}`;
-      if (state?.prevLocation) {
-        dispatch(
-          replace({ pathname, state: { prevLocation: state.prevLocation } })
-        );
-        dispatch(setModal(true, "article", data.article.slug));
-      } else dispatch(push({ pathname }));
+      dispatch(
+        push({
+          pathname: `/articles/${data.article.slug}`,
+          state: { open: true },
+        })
+      );
     } else {
       dispatch(setError(true, data));
     }

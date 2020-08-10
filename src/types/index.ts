@@ -2,11 +2,10 @@ import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { combinedReducer } from "redux/reducer";
 import { Actions } from "./actions";
 import { FetcherFailError } from "./error";
-import { Location } from "history";
 
 export type State = ReturnType<ReturnType<typeof combinedReducer>>;
 
-export type LocationState = { prevLocation?: Location };
+export type LocationState = { open?: boolean };
 
 export type ThunkResult<R = void> = ThunkAction<R, State, unknown, Actions>;
 
@@ -18,3 +17,14 @@ export type XOR<T, U> = T | U extends object
   : T | U;
 
 export type FetchRV<T> = XOR<T, FetcherFailError>;
+
+export type TabQuery = Partial<{
+  type: string;
+  value: string;
+  page: string | number;
+}>;
+
+export type UrlParams = {
+  slug: string;
+  username: string;
+};

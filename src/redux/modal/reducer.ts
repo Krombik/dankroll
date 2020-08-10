@@ -1,17 +1,12 @@
-import { ActionTypes, ModalActions, ModalType } from "./type";
+import { ActionTypes, ModalActions } from "./type";
+import { Location } from "history";
 
 type State = {
-  open: boolean;
-  modal: ModalType;
-  slug: string;
-  refreshArticleList: ((...args: any) => any) | null;
+  prevLocation: Location | null;
 };
 
 const initialState: State = {
-  open: false,
-  modal: "",
-  slug: "",
-  refreshArticleList: null,
+  prevLocation: null,
 };
 
 export default function reducer(
@@ -19,15 +14,10 @@ export default function reducer(
   action: ModalActions
 ): State {
   switch (action.type) {
-    case ActionTypes.SET_MODAL:
+    case ActionTypes.SET_PREV_LOCATION:
       return {
         ...state,
-        ...action.payload,
-      };
-    case ActionTypes.SET_REFRESH_FUNC:
-      return {
-        ...state,
-        refreshArticleList: action.payload,
+        prevLocation: action.payload,
       };
     default:
       return state;

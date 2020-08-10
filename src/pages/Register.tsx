@@ -2,64 +2,79 @@ import React, { FC, useState, ChangeEvent, useCallback } from "react";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
-import { loginUser } from "api/user";
+import MuiLink from "@material-ui/core/Link";
+import { registerUser } from "api/user";
 import { useDispatch } from "react-redux";
 import { ThunkDispatcher } from "types";
 import { setError } from "redux/error/actions";
 import { setAuthorized } from "redux/authentication/actions";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import { setModal } from "redux/modal/actions";
 import Gutter from "components/common/Gutter";
+import { Link } from "react-router-dom";
+import { closeModal } from "redux/modal/actions";
 
-const Login: FC = () => {
+const Register: FC = () => {
   const dispatch = useDispatch<ThunkDispatcher>();
   const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const handleUsername = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  }, []);
   const handleEmail = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   }, []);
   const handlePassword = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   }, []);
-  const openRegister = useCallback(() => {
-    dispatch(setModal(true, "register"));
-  }, []);
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     setLoading(true);
-    const data = await loginUser(email, password);
+    const data = await registerUser(username, email, password);
     if (data.user) {
       dispatch(setAuthorized(data.user.token, data.user.username));
-      dispatch(setModal(false));
+      dispatch(closeModal());
     } else {
       dispatch(setError(true, data));
     }
-    setLoading(false);
   };
   return (
     <Gutter
       justify="center"
       alignItems="center"
       component={ValidatorForm}
-      componentProps={{ onSubmit: handleLogin, autoComplete: "off" }}
+      componentProps={{ onSubmit: handleRegister, autoComplete: "off" }}
       maxWidth="sm"
     >
       <Grid item xs={12}>
         <Typography align="center" variant="h4">
-          Sign in
+          Sign up
         </Typography>
       </Grid>
-      <Link
+      <MuiLink
         underline="always"
         variant="body2"
         color="inherit"
-        component="button"
-        name="register"
-        onClick={openRegister}
+        component={Link}
+        to={{
+          pathname: "/login",
+          state: { open: true },
+        }}
       >
-        Need an account?
-      </Link>
+        Have an account?
+      </MuiLink>
+      <Grid item xs={12}>
+        <TextValidator
+          value={username}
+          label="Username"
+          name="username"
+          variant="outlined"
+          onChange={handleUsername}
+          fullWidth
+          validators={["required"]}
+          errorMessages={["this field is required"]}
+        />
+      </Grid>
       <Grid item xs={12}>
         <TextValidator
           value={email}
@@ -89,15 +104,15 @@ const Login: FC = () => {
       <Grid item>
         <Button
           variant="contained"
-          color="primary"
           type="submit"
+          color="primary"
           disabled={loading}
         >
-          Login
+          Register
         </Button>
       </Grid>
     </Gutter>
   );
 };
 
-export default Login;
+export default Register;

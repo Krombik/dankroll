@@ -2,7 +2,7 @@ import React, { FC, useCallback } from "react";
 import PaginationContainer from "@material-ui/lab/Pagination";
 import PaginationItem from "@material-ui/lab/PaginationItem";
 import { useDispatch } from "react-redux";
-import { ThunkDispatcher } from "types";
+import { ThunkDispatcher, TabQuery } from "types";
 import { setPageNumber } from "redux/articleTabs/actions";
 import { Link, useLocation } from "react-router-dom";
 import { parse, stringify, stringifyUrl } from "query-string";
@@ -16,7 +16,7 @@ type Props = {
 const Pagination: FC<Props> = ({ page, count, tabKey }) => {
   const dispatch = useDispatch<ThunkDispatcher>();
   const { pathname, search } = useLocation();
-  const { page: _, ...query } = parse(search);
+  const { page: _, ...query }: TabQuery = parse(search);
   const url = `${pathname}?${stringify(query)}`;
   const updatePageNumber = useCallback(
     (_: any, page: number) => {

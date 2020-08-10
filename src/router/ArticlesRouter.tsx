@@ -1,13 +1,13 @@
 import React, { FC } from "react";
 import { Switch, Route } from "react-router-dom";
-import ArticlePage from "../pages/articles/[slug]";
-import EditArticlePage from "../pages/articles/[slug]/edit";
+import Article from "pages/Article";
+import Editor from "pages/Editor";
 
 const ArticlesRouter: FC = () => {
   return (
     <Switch>
-      <Route exact path={`/articles/:slug`} component={ArticlePage} />
-      <Route exact path={`/articles/:slug/edit`} component={EditArticlePage} />
+      <Route exact path={`/articles/:slug`} component={Article} />
+      <Route exact path={`/articles/:slug/edit`} component={Editor} />
     </Switch>
   );
 };

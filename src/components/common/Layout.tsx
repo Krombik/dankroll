@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import "styled-components/macro";
 import Header from "containers/header/Header";
-import Modal from "containers/modal/Modal";
 import ErrorAlert from "containers/common/ErrorAlert";
 import Grid from "@material-ui/core/Grid";
 
@@ -21,7 +20,6 @@ const Layout: FC = ({ children }) => (
       <Header />
       {children}
     </Grid>
-    <Modal />
     <ErrorAlert />
   </>
 );
