@@ -18,7 +18,8 @@ const AppRouter: FC = () => {
     dispatch(closeModal());
   }, []);
   useEffect(() => {
-    if (close) dispatch(setPrevLocation((prevLocation.current = location)));
+    if (close) dispatch(setPrevLocation(location));
+    prevLocation.current = location;
   });
   return (
     <>
@@ -28,7 +29,7 @@ const AppRouter: FC = () => {
         <ModalRouter />
       </Switch>
       <Modal open={!close} onClose={handleClose}>
-        <ModalRouter />
+        <ModalRouter location={(close && prevLocation.current) || location} />
       </Modal>
     </>
   );

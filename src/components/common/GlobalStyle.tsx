@@ -43,6 +43,9 @@ const GlobalStyle = createGlobalStyle`
         border-radius: 5px;
       }
     }
+    &:focus {
+      outline: none;
+    }
   }
   body {
     overflow-x: hidden;

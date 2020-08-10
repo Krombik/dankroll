@@ -1,25 +1,27 @@
 import React, { FC } from "react";
 import "styled-components/macro";
 import Fade from "@material-ui/core/Fade";
+import Grid from "@material-ui/core/Grid";
 import MuiModal, { ModalProps } from "@material-ui/core/Modal";
-import { Grid, Theme } from "@material-ui/core";
+import MuiBackdrop, { BackdropProps } from "@material-ui/core/Backdrop";
+import { Theme } from "@material-ui/core";
 import { ThemeProps } from "styled-components/macro";
+
+const Backdrop: FC<BackdropProps> = (props) => (
+  <MuiBackdrop {...props} transitionDuration={500} />
+);
 
 const Modal: FC<ModalProps> = ({ children, ...props }) => (
   <MuiModal
-    disableEnforceFocus
-    disableAutoFocus
     {...props}
     closeAfterTransition
-    BackdropProps={{
-      timeout: 500,
-    }}
     css={`
       display: flex;
       margin: auto;
     `}
+    BackdropComponent={Backdrop}
   >
-    <Fade in={props.open}>
+    <Fade in={props.open} timeout={500}>
       <Grid
         container
         spacing={3}
