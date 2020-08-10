@@ -3,13 +3,15 @@ import { Switch, Route } from "react-router-dom";
 import Article from "pages/Article";
 import Editor from "pages/Editor";
 
-const ArticlesRouter: FC = () => {
-  return (
-    <Switch>
-      <Route exact path={`/articles/:slug`} component={Article} />
+type Props = { authorized: boolean };
+
+const ArticlesRouter: FC<Props> = ({ authorized }) => (
+  <Switch>
+    <Route exact path={`/articles/:slug`} component={Article} />
+    {authorized && (
       <Route exact path={`/articles/:slug/edit`} component={Editor} />
-    </Switch>
-  );
-};
+    )}
+  </Switch>
+);
 
 export default ArticlesRouter;
