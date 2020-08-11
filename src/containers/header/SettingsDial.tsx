@@ -6,6 +6,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ThemeSwitcher from "./ThemeSwitcher";
 import OffsetSelect from "./OffsetSelect";
 import SpeedDial from "@material-ui/lab/SpeedDial";
+import { ThemeProps } from "types";
 
 const SettingsDial: FC = () => {
   const [open, setOpen] = useState(false);
@@ -46,9 +47,10 @@ const SettingsDial: FC = () => {
               transform: translateX(-50%);
               position: relative;
               left: 50%;
-              border-radius: 10%;
+              border-radius: ${({ theme }: ThemeProps) =>
+                theme.shape.borderRadius}px;
               &:not(:last-child) {
-                margin-bottom: 8px;
+                margin-bottom: ${({ theme }: ThemeProps) => theme.spacing(1)}px;
               }
             }
           }
