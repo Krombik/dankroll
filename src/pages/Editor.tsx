@@ -5,7 +5,6 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import "styled-components/macro";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import EditableTagList from "containers/tag/EditableTagList";
@@ -13,19 +12,19 @@ import { ArticleEditorType, ArticleObj } from "types/article";
 import { createArticle, updateArticle, getArticleUrl } from "api/article";
 import { createSelector } from "reselect";
 import { useSelector, useDispatch } from "react-redux";
-import { State, ThunkDispatcher, FetchRV, UrlParams } from "types";
+import { State, ThunkDispatcher, FetchRV } from "types";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { setError } from "redux/error/actions";
 import {
   setEditor,
   setCurrentEditor,
   removeEditor,
+  resetEditor,
 } from "redux/editor/actions";
 import { mutate } from "swr";
 import Gutter from "components/common/Gutter";
 import Typography from "@material-ui/core/Typography";
 import { push } from "connected-react-router";
-import { RouteComponentProps } from "react-router-dom";
 
 const selectData = createSelector(
   (state: State) => state.authentication.token,
@@ -34,11 +33,9 @@ const selectData = createSelector(
   (token, editors, currentEditor) => ({ token, editors, currentEditor })
 );
 
-const Editor: FC<RouteComponentProps<UrlParams>> = ({
-  match: {
-    params: { slug },
-  },
-}) => {
+type Props = { slug?: string };
+
+const Editor: FC<Props> = ({ slug }) => {
   const key = slug ? `_${slug}` : "new";
   const [loading, setLoading] = useState(false);
   const { token, editors, currentEditor } = useSelector(selectData);
@@ -61,7 +58,7 @@ const Editor: FC<RouteComponentProps<UrlParams>> = ({
     [key]
   );
   const handleResetEditor = useCallback(() => {
-    dispatch(removeEditor(key));
+    dispatch(resetEditor(key));
   }, [key]);
   const handleArticleEdit = async () => {
     setLoading(true);
@@ -109,7 +106,8 @@ const Editor: FC<RouteComponentProps<UrlParams>> = ({
       justify="center"
       alignItems="center"
       component={ValidatorForm}
-      componentProps={{ onSubmit: handleArticleEdit, autoComplete: "off" }}
+      onSubmit={handleArticleEdit}
+      autoComplete="off"
       maxWidth="md"
     >
       <Grid item xs={12}>
@@ -164,15 +162,7 @@ const Editor: FC<RouteComponentProps<UrlParams>> = ({
           editTags={handleTag}
         />
       )}
-      <Grid
-        item
-        container
-        spacing={3}
-        justify="center"
-        css={`
-          overflow-y: hidden;
-        `}
-      >
+      <Grid item container spacing={3} justify="center" xs={12}>
         <Grid item>
           <Button
             variant="contained"

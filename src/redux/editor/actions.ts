@@ -9,6 +9,7 @@ import {
 import fetcher from "utils/fetcher";
 import { getArticleUrl } from "api/article";
 import { setError } from "../error/actions";
+import { FetcherFailError } from "types/error";
 
 export const setEditor = (
   key: string,
@@ -25,19 +26,33 @@ export const setCurrentEditor = (
   article?: ArticleType
 ): ThunkResult<Promise<void>> => async (dispatch, getState) => {
   let editor: ArticleCurrentEditorType;
+  const {
+    editor: { editors },
+    authentication: { currentUserName },
+  } = getState();
   if (key === "new") {
     editor = { title: "", description: "", body: "", tagList: [] };
   } else if (article) {
     editor = article;
   } else {
     const data = await fetcher.get<ArticleObj>(getArticleUrl(key.slice(1)));
-    if (data.status || !data.article) {
-      dispatch(setError(true, data));
+    let accessDenied: boolean | undefined;
+    if (
+      data.status ||
+      !data.article ||
+      (accessDenied = data.article.author.username !== currentUserName)
+    ) {
+      dispatch(
+        setError(
+          true,
+          accessDenied ? { status: 403 } : (data as FetcherFailError)
+        )
+      );
       return;
     }
     editor = data.article;
   }
-  getState().editor.editors[key]
+  editors[key]
     ? dispatch({
         type: EditorActionTypes.SET_CURRENT,
         payload: editor,
@@ -51,6 +66,13 @@ export const setCurrentEditor = (
 export const removeEditor = (key: string): ThunkResult => (dispatch) => {
   dispatch({
     type: EditorActionTypes.REMOVE_EDITOR,
+    payload: key,
+  });
+};
+
+export const resetEditor = (key: string): ThunkResult => (dispatch) => {
+  dispatch({
+    type: EditorActionTypes.RESET_EDITOR,
     payload: key,
   });
 };

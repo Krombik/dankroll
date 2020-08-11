@@ -5,6 +5,7 @@ import App from "./containers/common/App";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor, history } from "./redux/store";
 import { ConnectedRouter } from "connected-react-router";
+import "font.css";
 
 render(
   <Provider store={store}>

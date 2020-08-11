@@ -1,12 +1,12 @@
 import { Location } from "history";
 
 export enum ActionTypes {
-  SET_PREV_LOCATION = "SET_PREV_LOCATION",
+  BEFORE_MODAL_LOCATION = "BEFORE_MODAL_LOCATION",
 }
 
-type SetPrevLocation = {
-  type: ActionTypes.SET_PREV_LOCATION;
+type SetBeforeModalLocation = {
+  type: ActionTypes.BEFORE_MODAL_LOCATION;
   payload: Location;
 };
 
-export type ModalActions = SetPrevLocation;
+export type ModalActions = SetBeforeModalLocation;

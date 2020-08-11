@@ -23,9 +23,9 @@ const App: FC = () => {
   const theme = useMemo(() => makeTheme(dark), [dark]);
   return (
     <StylesProvider injectFirst>
-      <GlobalStyle />
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
+          <GlobalStyle />
           <CssBaseline />
           <Layout>
             <AppRouter />

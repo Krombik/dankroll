@@ -14,7 +14,7 @@ type Props = {
 const ArticleBanner: FC<Props> = ({ article, controlButtons }) => (
   <Banner>
     <Grid item xs={12}>
-      <Typography variant="h2" color="textPrimary">
+      <Typography variant="h2">
         {article.title}
         {controlButtons}
       </Typography>
@@ -29,7 +29,6 @@ const ArticleBanner: FC<Props> = ({ article, controlButtons }) => (
       xs={12}
       component={ContentInfo}
       avatar={article.author.image}
-      titleTypographyProps={{ color: "textPrimary" }}
       username={article.author.username}
       date={
         article.updatedAt === article.createdAt

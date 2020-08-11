@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, memo } from "react";
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
@@ -27,7 +27,7 @@ type Props = {
   username: string;
 };
 
-const UserSection: FC<Props> = ({ username }) => {
+const UserSection: FC<Props> = memo(({ username }) => {
   const { token, currentUserName } = useSelector(selectData);
   const { data, mutate } = useSWR<FetchRV<UserObj>>(
     [getUserUrl(username), token],
@@ -49,7 +49,7 @@ const UserSection: FC<Props> = ({ username }) => {
       </Grid>
       <Grid item container alignItems="center" justify="center">
         <Grid item>
-          <Typography variant="h2" color="textPrimary">
+          <Typography variant="h2">
             {user.username}
             {user.username !== currentUserName ? (
               <UserSubscribeButton
@@ -74,12 +74,12 @@ const UserSection: FC<Props> = ({ username }) => {
         </Grid>
       </Grid>
       {user.bio && (
-        <Grid item color="textPrimary">
-          <Typography color="textPrimary">{user.bio}</Typography>
+        <Grid item>
+          <Typography>{user.bio}</Typography>
         </Grid>
       )}
     </Banner>
   );
-};
+});
 
 export default UserSection;

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, memo } from "react";
+import React, { FC, useEffect } from "react";
 import { ArticlesObj } from "types/article";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -28,7 +28,7 @@ type Props = {
   value?: string;
 };
 
-const ArticleList: FC<Props> = memo(({ page, type, value, tabKey }) => {
+const ArticleList: FC<Props> = ({ page, type, value, tabKey }) => {
   const { token, offset } = useSelector(selectData);
   const prevQuery = usePrevious({ type, value });
   const startPage = page && +page > 0 ? +page - 1 : 0;
@@ -110,6 +110,6 @@ const ArticleList: FC<Props> = memo(({ page, type, value, tabKey }) => {
       )}
     </>
   );
-});
+};
 
 export default ArticleList;

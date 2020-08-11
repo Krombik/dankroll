@@ -18,6 +18,8 @@ export const setError = (
             .join(", ")
         : status === 401
         ? "Unauthorized"
+        : status === 403
+        ? "Access denied"
         : status === 404
         ? "Not Found"
         : status === 500

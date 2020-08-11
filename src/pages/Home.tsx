@@ -9,22 +9,27 @@ import Gutter from "components/common/Gutter";
 import TabBar from "components/tabs/TabBar";
 import { TabQuery } from "types";
 import { parse } from "query-string";
-import { RouteComponentProps } from "react-router-dom";
 
-const Home: FC<RouteComponentProps> = memo(({ location: { search } }) => {
-  const { type = TabValues.DEFAULT, value, page }: TabQuery = parse(search);
+type Props = { authorized: boolean; search: string };
+
+const Home: FC<Props> = memo(({ search, authorized }) => {
+  let { type, value, page }: TabQuery = parse(search);
+  if (
+    !type ||
+    !value ||
+    (type !== TabValues.TAG && (type !== TabValues.FEED || !authorized))
+  )
+    type = TabValues.DEFAULT;
   const currTab = value ? `${type}-${value}` : type;
   return (
     <>
       <Banner justify="center">
         <Grid item>
-          <Typography variant="h1" color="textPrimary">
-            {SITE_NAME}
-          </Typography>
+          <Typography variant="h1">{SITE_NAME}</Typography>
         </Grid>
       </Banner>
       <TabBar>
-        <SortableTabs value={currTab} />
+        <SortableTabs value={currTab} authorized={authorized} />
       </TabBar>
       <Gutter>
         <ArticleList

@@ -29,7 +29,7 @@ const Login: FC = () => {
     const data = await loginUser(email, password);
     if (data.user) {
       dispatch(setAuthorized(data.user.token, data.user.username));
-      dispatch(closeModal());
+      dispatch(closeModal(true));
     } else {
       dispatch(setError(true, data));
     }
@@ -39,7 +39,8 @@ const Login: FC = () => {
       justify="center"
       alignItems="center"
       component={ValidatorForm}
-      componentProps={{ onSubmit: handleLogin, autoComplete: "off" }}
+      onSubmit={handleLogin}
+      autoComplete="off"
       maxWidth="sm"
     >
       <Grid item xs={12}>

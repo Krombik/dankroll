@@ -1,4 +1,4 @@
-import React, { FC, SyntheticEvent, useCallback, memo } from "react";
+import React, { FC, SyntheticEvent, useCallback } from "react";
 import RemovableTab from "components/tabs/RemovableTab";
 import Tab from "@material-ui/core/Tab";
 import { useSelector } from "react-redux";
@@ -13,15 +13,13 @@ import { TabValues } from "utils/constant";
 
 const selectData = createSelector(
   (state: State) => state.articleTabs.tabList,
-  (state: State) => state.authentication.currentUserName,
-  (tabList, currentUserName) => ({
-    tabList,
-    currentUserName,
-  })
+  (tabList) => ({ tabList })
 );
 
-const SortableTabs: FC<TabsProps> = memo((props) => {
-  const { tabList, currentUserName } = useSelector(selectData);
+type Props = { authorized: boolean };
+
+const SortableTabs: FC<TabsProps & Props> = ({ authorized, ...props }) => {
+  const { tabList } = useSelector(selectData);
   const dispatch = useDispatch<ThunkDispatcher>();
   const onSortEnd = useCallback(({ oldIndex, newIndex }) => {
     dispatch(moveTab(oldIndex, newIndex));
@@ -47,9 +45,7 @@ const SortableTabs: FC<TabsProps> = memo((props) => {
         scrollButtons="auto"
         {...props}
       >
-        {currentUserName && (
-          <Tab value={TabValues.FEED} label={`${currentUserName}'s feed`} />
-        )}
+        {authorized && <Tab value={TabValues.FEED} label="Feed" />}
         <Tab value={TabValues.DEFAULT} label="Last articles" />
         {tabList.map((tab, index) => (
           <RemovableTab
@@ -59,10 +55,10 @@ const SortableTabs: FC<TabsProps> = memo((props) => {
             onRemove={handleRemove}
           />
         ))}
-        <AddNewTabButton value={TabValues.ADD} component="div" />
+        <AddNewTabButton value={TabValues.ADD} />
       </Tabs>
     </SortableList>
   );
-});
+};
 
 export default SortableTabs;

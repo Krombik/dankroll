@@ -7,16 +7,16 @@ export const closeModal = (isReplace?: boolean): ThunkResult => (
   dispatch,
   getState
 ) => {
-  const { prevLocation } = getState().modal;
-  const arg = prevLocation || ("/" as any);
+  const { beforeModalLocation } = getState().modal;
+  const arg = beforeModalLocation || ("/" as any);
   dispatch(isReplace ? replace(arg) : push(arg));
 };
 
-export const setPrevLocation = (location: Location): ThunkResult => (
+export const setBeforeModalLocation = (location: Location): ThunkResult => (
   dispatch
 ) => {
   dispatch({
-    type: ActionTypes.SET_PREV_LOCATION,
+    type: ActionTypes.BEFORE_MODAL_LOCATION,
     payload: location,
   });
 };

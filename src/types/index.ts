@@ -2,6 +2,8 @@ import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { combinedReducer } from "redux/reducer";
 import { Actions } from "./actions";
 import { FetcherFailError } from "./error";
+import { Theme } from "@material-ui/core";
+import { ThemeProps as GenericThemeProps } from "styled-components/macro";
 
 export type State = ReturnType<ReturnType<typeof combinedReducer>>;
 
@@ -28,3 +30,5 @@ export type UrlParams = {
   slug: string;
   username: string;
 };
+
+export type ThemeProps = GenericThemeProps<Theme>;

@@ -33,7 +33,7 @@ const Register: FC = () => {
     const data = await registerUser(username, email, password);
     if (data.user) {
       dispatch(setAuthorized(data.user.token, data.user.username));
-      dispatch(closeModal());
+      dispatch(closeModal(true));
     } else {
       dispatch(setError(true, data));
     }
@@ -43,7 +43,8 @@ const Register: FC = () => {
       justify="center"
       alignItems="center"
       component={ValidatorForm}
-      componentProps={{ onSubmit: handleRegister, autoComplete: "off" }}
+      onSubmit={handleRegister}
+      autoComplete="off"
       maxWidth="sm"
     >
       <Grid item xs={12}>

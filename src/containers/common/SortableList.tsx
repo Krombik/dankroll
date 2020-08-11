@@ -1,8 +1,6 @@
-import React, { memo } from "react";
+import React from "react";
 import { SortableContainer } from "react-sortable-hoc";
 
-const SortableList = memo(
-  SortableContainer(({ children }: any) => <>{children}</>)
-);
+const SortableList = SortableContainer(({ children }: any) => <>{children}</>);
 
 export default SortableList;
