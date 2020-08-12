@@ -30,24 +30,17 @@ type Props = {
 
 const ArticleList: FC<Props> = ({ page, type, value, tabKey }) => {
   const { token, offset } = useSelector(selectData);
-  const prevQuery = usePrevious({ type, value });
+  const prevTabKey = usePrevious(tabKey);
   const startPage = page && +page > 0 ? +page - 1 : 0;
   const { data, setSize, size, mutate } = useSWRInfinite<FetchRV<ArticlesObj>>(
     (index) => [getArticlesUrl(type, value, startPage + index, offset), token],
     fetcher.get
   );
   useEffect(() => {
-    if (setSize && data && size === 1 && data.length > 1) setSize(data.length);
-  }, [type, value]);
+    if (setSize && data && data.length > 1 && size === 1) setSize(data.length);
+  }, [tabKey]);
   useEffect(() => {
-    if (
-      setSize &&
-      (size || 0 > 1) &&
-      prevQuery &&
-      value === prevQuery.value &&
-      type === prevQuery.type
-    )
-      setSize(1);
+    if (setSize && (size || 0 > 1) && tabKey === prevTabKey) setSize(1);
   }, [page]);
   const history = useHistory();
   useEffect(() => {
@@ -68,9 +61,6 @@ const ArticleList: FC<Props> = ({ page, type, value, tabKey }) => {
         <Typography align="center">No articles available</Typography>
       </Grid>
     );
-  const loadMore = () => {
-    setSize((x) => x + 1);
-  };
   const isLoadMoreUnavailable = data.length * offset >= articlesCount;
   const isLoading = data.length !== size;
   const pageCount = Math.ceil(articlesCount / offset);
@@ -87,7 +77,7 @@ const ArticleList: FC<Props> = ({ page, type, value, tabKey }) => {
         <>
           <Grid container item justify="center">
             <Button
-              onClick={loadMore}
+              onClick={() => setSize((x) => x + 1)}
               variant="contained"
               color="primary"
               disabled={isLoading || isLoadMoreUnavailable}
